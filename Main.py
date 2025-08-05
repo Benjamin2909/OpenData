@@ -5,6 +5,8 @@ import json
 import geopandas as gpd
 from streamlit_folium import st_folium
 from pathlib import Path
+import matplotlib.pyplot as plt
+
 
 st.title("Interaktive Karte mit Layer-Steuerung")
 
@@ -105,6 +107,7 @@ def add_color_legend(map_object):
     legend = MacroElement()
     legend._template = Template(legend_html)
     map_object.get_root().add_child(legend)
+
 
 
 # GeoJSON-Layer verarbeiten
@@ -208,3 +211,60 @@ add_color_legend(m)
 
 # Karte anzeigen
 st_data = st_folium(m, width=800, height=600)
+
+st.subheader("Durchschnittliche Belastung pro Jahr")
+
+# Daten sammeln
+jahres_daten = {
+    "NO2 Fläche": {},
+    "NO2 Straße": {},
+    "PM10 Fläche": {},
+    "PM10 Straße": {}
+}
+
+for layer_name in layer_options:
+    filepath = geojson_dir / f"{layer_name}.geojson"
+    if filepath.exists():
+        with open(filepath, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        for feature in data["features"]:
+            props = feature.get("properties", {})
+            jahr = str(props.get("Jahr") or props.get("jahr") or "unbekannt")
+
+            if "no2" in layer_name and "flaeche" in layer_name:
+                val = safe_float(props.get("NO2"))
+                if val > 0:
+                    jahres_daten["NO2 Fläche"].setdefault(jahr, []).append(val)
+
+            elif "no2" in layer_name and "strasse" in layer_name:
+                val = safe_float(props.get("no2_i1"))
+                if val > 0:
+                    jahres_daten["NO2 Straße"].setdefault(jahr, []).append(val)
+
+            elif "pm10" in layer_name and "flaeche" in layer_name:
+                val = safe_float(props.get("PM10"))
+                if val > 0:
+                    jahres_daten["PM10 Fläche"].setdefault(jahr, []).append(val)
+
+            elif "pm10" in layer_name and "strasse" in layer_name:
+                val = safe_float(props.get("pm10_ist"))
+                if val > 0:
+                    jahres_daten["PM10 Straße"].setdefault(jahr, []).append(val)
+
+# Durchschnitt pro Jahr berechnen
+df = pd.DataFrame({
+    name: {jahr: round(sum(vals)/len(vals), 2) for jahr, vals in jahres.items()}
+    for name, jahres in jahres_daten.items()
+}).sort_index()
+
+# Diagramm zeichnen
+fig, ax = plt.subplots(figsize=(10, 5))
+df.plot(ax=ax, marker='o')
+ax.set_ylabel("Belastung (µg/m³)")
+ax.set_xlabel("Jahr")
+ax.set_title("NO₂ und PM10 – Durchschnittliche Jahresbelastung")
+ax.grid(True)
+ax.legend(title="Kategorie")
+
+st.pyplot(fig)
