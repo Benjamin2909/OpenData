@@ -3,6 +3,14 @@ import geopandas as gpd
 from shapely import wkt
 from pathlib import Path
 
+
+def safe_float(value):
+    try:
+        num = float(str(value).replace(",", "."))
+        return round(num, 2) if num > 0 else None
+    except:
+        return 0.0
+            
 # Pfade
 input_files = [
     ("NO2 - flächenhafte Belastung (2011).csv", "2011"),
@@ -28,6 +36,7 @@ for file_name, jahr in input_files:
         df['geometry'] = df['shape'].apply(lambda s: wkt.loads(clean_wkt(s)))
         gdf = gpd.GeoDataFrame(df[['deskn1']], geometry=df['geometry'], crs="EPSG:4326")
         gdf = gdf.rename(columns={"deskn1": "NO2"})
+        gdf["NO2"] = gdf["NO2"].apply(safe_float)
         gdf["Jahr"] = jahr
 
         # Exportieren

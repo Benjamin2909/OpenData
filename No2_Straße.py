@@ -3,6 +3,13 @@ import json
 import re
 from pathlib import Path
 
+def safe_float(value):
+    try:
+        num = float(str(value).replace(",", "."))
+        return round(num, 2) if num > 0 else None
+    except:
+        return 0.0
+
 # CSV-Dateien mit Jahr
 csv_files = {
     "2011": "NO2 - Straßenrandbelastung (2011).csv",
@@ -50,7 +57,7 @@ for jahr, filename in csv_files.items():
 
             properties = {
                 "strname": row.get("strname", ""),
-                "no2_i1": no2_value,
+                "no2_i1": safe_float(no2_value),
                 "jahr": jahr
             }
 

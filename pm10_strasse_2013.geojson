@@ -61591,7 +61591,7 @@
       },
       "properties": {
         "strname": "Zum Triebenberg ",
-        "pm10_ist": -999.0,
+        "pm10_ist": null,
         "jahr": "2013"
       }
     },
@@ -88749,7 +88749,7 @@
       },
       "properties": {
         "strname": "Zum Triebenberg ",
-        "pm10_ist": -999.0,
+        "pm10_ist": null,
         "jahr": "2013"
       }
     },

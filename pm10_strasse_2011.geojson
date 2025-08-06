@@ -37877,7 +37877,7 @@
       },
       "properties": {
         "strname": "Grundstraße (GP) ",
-        "pm10_ist": 0.0,
+        "pm10_ist": null,
         "jahr": "2011"
       }
     },
@@ -54683,7 +54683,7 @@
       },
       "properties": {
         "strname": "Grundstraße (GP) ",
-        "pm10_ist": 0.0,
+        "pm10_ist": null,
         "jahr": "2011"
       }
     },
@@ -89656,7 +89656,7 @@
       },
       "properties": {
         "strname": "Wilschdorfer Landstraße ",
-        "pm10_ist": 0.0,
+        "pm10_ist": null,
         "jahr": "2011"
       }
     },
@@ -105425,7 +105425,7 @@
       },
       "properties": {
         "strname": "Grundstraße (GP) ",
-        "pm10_ist": 0.0,
+        "pm10_ist": null,
         "jahr": "2011"
       }
     },
@@ -105527,7 +105527,7 @@
       },
       "properties": {
         "strname": "Grundstraße (GP) ",
-        "pm10_ist": 0.0,
+        "pm10_ist": null,
         "jahr": "2011"
       }
     },

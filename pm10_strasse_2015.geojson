@@ -36994,7 +36994,7 @@
       },
       "properties": {
         "strname": "Tornaer Straße",
-        "pm10_ist": 0.0,
+        "pm10_ist": null,
         "jahr": "2015"
       }
     },

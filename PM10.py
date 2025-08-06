@@ -3,6 +3,14 @@ import json
 import re
 from pathlib import Path
 
+def safe_float(value):
+    try:
+        num = float(str(value).replace(",", "."))
+        return round(num, 2) if num > 0 else None
+    except:
+        return None
+
+
 # Verzeichnis definieren
 input_dir = Path("C:/Users/benab/.vscode/extensions/Dev/Project2")
 output_dir = Path("C:/Users/benab/.vscode/extensions/Dev/Project2")
@@ -60,7 +68,7 @@ for jahr, filename in pm10_strasse_files.items():
             },
             "properties": {
                 "strname": row.get("strname", ""),
-                "pm10_ist": row.get("pm10_ist", ""),
+                "pm10_ist": safe_float(row.get("pm10_ist", "")),
                 "jahr": jahr
             }
         }
@@ -70,7 +78,7 @@ for jahr, filename in pm10_strasse_files.items():
         "type": "FeatureCollection",
         "features": features
     }
-
+    
     output_file = output_dir / f"pm10_strasse_{jahr}.geojson"
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(geojson_obj, f, ensure_ascii=False, indent=2)
