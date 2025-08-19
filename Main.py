@@ -7,9 +7,26 @@ from streamlit_folium import st_folium
 from pathlib import Path
 from branca.colormap import StepColormap
 import matplotlib.pyplot as plt
+from streamlit.components.v1 import html
+from branca.element import MacroElement
+from jinja2 import Template
 
+# --- Inhaltsverzeichnis ---
+st.sidebar.title("Inhaltsverzeichnis")
+toc_items = {
+    "1. Karte": "#karte",
+    "2. Durchschnittliche Belastung pro Jahr": "#durchschnitt",
+    "3. Weitere Informationen zu den Datensätzen": "#informationen",
+    "   3.1 NO₂-Flächenbelastung": "#info_no2_flaeche",
+    "   3.2 NO₂-Straßenrandbelastung": "#info_no2_strasse",
+    "   3.3 PM₁₀-Flächenbelastung": "#info_pm10_flaeche",
+    "   3.4 PM₁₀-Straßenrandbelastung": "#info_pm10_strasse"
+}
+for name, anchor in toc_items.items():
+    st.sidebar.markdown(f"- [{name}]({anchor})")
 
-st.title("Interaktive Karte mit Layer-Steuerung")
+st.markdown("<a name='karte'></a>", unsafe_allow_html=True) 
+st.title("1. Interaktive Karte mit Layer-Steuerung")
 
 # GeoJSON-Verzeichnis und Dateien
 geojson_dir = Path("C:/Users/benab/.vscode/extensions/Dev/Project2")
@@ -17,15 +34,33 @@ boundary_file = "dresden_grenze.geojson"
 geojson_files = [f for f in geojson_dir.glob("*.geojson") if f.name != boundary_file]
 layer_options = [f.stem for f in geojson_files]
 
-
+col1, col2 = st.columns([5, 1])
 # Layerauswahl
-selected_layers = st.multiselect(
-    "Wähle die Layer aus, die angezeigt werden sollen:",
-    layer_options
-)
+with col1:
+    selected_layers = st.multiselect(
+        "Wähle die Layer aus, die angezeigt werden sollen:",
+        layer_options
+    )
 
-# Karte erzeugen
+class MetricScaleControl(MacroElement):
+    _template = Template(u"""
+        {% macro script(this, kwargs) %}
+        var mapObj = {{this._parent.get_name()}};
+        mapObj.whenReady(function() {
+            L.control.scale({
+                metric: true,
+                imperial: false,
+                position: 'bottomleft'
+            }).addTo(mapObj);
+        });
+        {% endmacro %}
+    """)
+
+# Karte ohne eingebauten Maßstab
 m = folium.Map(location=[51.05, 13.74], zoom_start=12)
+
+# Nur metrischen Maßstab hinzufügen
+m.add_child(MetricScaleControl())
 
 # Stadtgrenze laden
 boundary_path = geojson_dir / boundary_file
@@ -208,16 +243,15 @@ fig, ax = plt.subplots(figsize=(10, 5))
 df.plot(ax=ax, marker='o')
 ax.set_ylabel("Belastung (µg/m³)")
 ax.set_xlabel("Jahr")
-ax.set_title("NO₂ und PM10 – Durchschnittliche Jahresbelastung")
+ax.set_title("NO₂ und PM₁₀ – Durchschnittliche Jahresbelastung")
 ax.grid(True)
 ax.legend(title="Kategorie")
 
-from streamlit.components.v1 import html
 
-col1, col2 = st.columns([6, 1])
-
+col1, col2 = st.columns([5, 1])
+st.set_page_config(layout="wide")
 with col1:
-    st_folium(m, width=800, height=600)
+    st_folium(m, width=1000, height=600)
     
 with col2:
     st.markdown(
@@ -258,6 +292,42 @@ with col2:
         </div>
         """, unsafe_allow_html=True
     )
-    
-st.markdown("<h3 style='margin-bottom: 0px; margin-top: 0px;'>Durchschnittliche Belastung pro Jahr</h3>", unsafe_allow_html=True)
+st.markdown("<a name='durchschnitt'></a>", unsafe_allow_html=True)
+st.header("2. Durchschnittliche Belastung pro Jahr")
 st.pyplot(fig)
+
+# Weitere Informationen
+st.markdown("<a name='informationen'></a>", unsafe_allow_html=True)
+st.header("3. Weitere Informationen zu den Datensätzen")
+
+# Unterkapitel
+st.markdown("<a name='info_no2_flaeche'></a>", unsafe_allow_html=True)
+st.subheader("3.1 NO₂-Flächenbelastung")
+st.write("""
+Die flächenhaften NO₂-Daten zeigen modellierte Jahresmittelwerte der Stickstoffdioxid-Konzentration 
+in einem Raster von 1 × 1 Kilometer über das gesamte Dresdner Stadtgebiet. Grundlage ist eine Modellierung 
+des Sächsischen Landesamts für Umwelt, Landwirtschaft und Geologie (LfULG), die Verkehrsstärken, Fahrmuster, 
+Emissionsfaktoren, meteorologische Daten, Bebauungsstrukturen und Messwerte der ständigen Luftschadstoffüberwachung kombiniert.
+""")
+st.markdown("<a name='info_no2_strasse'></a>", unsafe_allow_html=True)
+st.subheader("3.2 NO₂-Straßenrandbelastung")
+st.write("""
+Diese Datensätze enthalten modellierte NO₂-Jahresmittelwerte **direkt am Straßenrand** für ein ausgewähltes Hauptstraßennetz. 
+Die Berechnungen berücksichtigen u. a. Verkehrsdichte, Fahrmuster, Straßenneigung, Bebauungshöhe und -dichte, 
+sowie Aufwirbelungen und Abrieb.
+""")
+
+st.markdown("<a name='info_pm10_flaeche'></a>", unsafe_allow_html=True)
+st.subheader("3.3 PM₁₀-Flächenbelastung")
+st.write("""Die flächenhaften PM₁₀-Daten zeigen modellierte Jahresmittelwerte der Feinstaubkonzentration 
+(Partikel mit einem aerodynamischen Durchmesser ≤ 10 µm) in einem 1 × 1 km-Raster. 
+Die Modellierung nutzt ähnliche Eingangsdaten wie bei NO₂, zusätzlich werden Ferntransport-Effekte 
+(z. B. Staub aus Osteuropa, Saharastaub) berücksichtigt.
+""")
+
+st.markdown("<a name='info_pm10_strasse'></a>", unsafe_allow_html=True)
+st.subheader("3.4 PM₁₀-Straßenrandbelastung")
+st.write("""
+Diese Daten geben die modellierte PM₁₀-Belastung direkt an Hauptverkehrsstraßen wieder. 
+Neben lokalen Quellen wie Verkehr und Baustellen können auch großräumige Staubtransporte den Wert beeinflussen.
+""")

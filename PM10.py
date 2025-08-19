@@ -1,15 +1,7 @@
 import pandas as pd
 import json
-import re
 from pathlib import Path
-
-def safe_float(value):
-    try:
-        num = float(str(value).replace(",", "."))
-        return round(num, 2) if num > 0 else None
-    except:
-        return None
-
+from utils import linestring_to_coordinates, safe_float
 
 # Verzeichnis definieren
 input_dir = Path("C:/Users/benab/.vscode/extensions/Dev/Project2")
@@ -23,24 +15,6 @@ pm10_strasse_files = {
     "2015": "PM10 - Straßenrandbelastung (2015).csv",
     "2019": "PM10 - Straßenrandbelastung (2019).csv"
 }
-
-# Funktion zum Parsen von LINESTRING
-def linestring_to_coordinates(linestring):
-    match = re.search(r'LINESTRING\s*\(([^)]+)\)', linestring)
-    if not match:
-        return []
-    coord_pairs = match.group(1).split(',')
-    coords = []
-    for pair in coord_pairs:
-        parts = pair.strip().replace('(', '').replace(')', '').split()
-        if len(parts) == 2:
-            try:
-                lon = float(parts[0].replace(",", "."))
-                lat = float(parts[1].replace(",", "."))
-                coords.append([lon, lat])
-            except Exception:
-                continue
-    return coords
 
 # CSVs verarbeiten und GeoJSON erzeugen
 for jahr, filename in pm10_strasse_files.items():

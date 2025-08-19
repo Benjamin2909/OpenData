@@ -2,14 +2,9 @@ import pandas as pd
 import geopandas as gpd
 from shapely import wkt
 from pathlib import Path
+from utils import safe_float
 
 
-def safe_float(value):
-    try:
-        num = float(str(value).replace(",", "."))
-        return round(num, 2) if num > 0 else None
-    except:
-        return 0.0
             
 # Pfade
 input_files = [
