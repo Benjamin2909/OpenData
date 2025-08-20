@@ -1,7 +1,7 @@
 streamlit
 folium
 geopandas
-strreamlit_folium
+streamlit_folium
 pathlib
 branca.colormap
 matplotlib.pyplot
