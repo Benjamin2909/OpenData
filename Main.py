@@ -30,7 +30,7 @@ st.title("1. Dashboard zur Luftverschmutzung in Dresden")
 geojson_dir = Path(__file__).parent
 boundary_file = "dresden_grenze.geojson"
 geojson_files = [f for f in geojson_dir.glob("*.geojson") if f.name != boundary_file]
-layer_options = [f.stem for f in geojson_files]
+layer_options = sorted([f.stem for f in geojson_files])
 
 col1, col2 = st.columns([5, 1])
 # Layerauswahl
@@ -376,6 +376,7 @@ Das LfULG berechnet auf der Grundlage des Sächsischen Emissionskatasters und de
 **4. Kartenbeschreibung**\n
 Die Karte stellt vor einem Stadthintergrund, der zur besseren Orientierung im Stadtgebiet dient, im Ein-Kilometer-Raster die flächenhafte PM10-Belastung als Jahresmittelwert dar. Zusätzlich wird die häufig erhöhte Luftverschmutzung am Straßenrand für ein speziell festgelegtes Straßennetz der Stadt Dresden dargestellt. Beide Werte zusammen können einen Eindruck über die Belastungssituation in der Stadt vermitteln. Punktgenaue Aussagen sind naturgemäß in einem Ein-Kilometer-Raster nicht möglich. Auch bei der berechneten Straßenrandbelastung sind derartige Aussagen nicht möglich, weil die verwendeten Bebauungsdaten (Fahrbahnabstand, Bebauungsdichte, Bebauungshöhe), die zur Ermittlung dieser Belastung herangezogen werden, Mittelwerte sind, die für mindestens 65 Meter lange Abschnitte gelten.\n
 """)
+
 
 
 
