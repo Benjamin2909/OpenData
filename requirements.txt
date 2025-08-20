@@ -1,0 +1,13 @@
+streamlit
+folium
+geopandas
+Pandas
+json
+strreamlit_folium
+pathlib
+branca.colormap
+matplotlib.pyplot
+streamlit.components.v1
+branca.element
+jinja2
+adjustText
