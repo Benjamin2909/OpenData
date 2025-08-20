@@ -2,10 +2,8 @@ streamlit
 folium
 geopandas
 streamlit_folium
-pathlib
-branca.colormap
 matplotlib.pyplot
 streamlit.components.v1
-branca.element
+branca
 jinja2
 adjustText
