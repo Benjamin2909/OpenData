@@ -251,17 +251,32 @@ df.index.name = "Jahr"  # nur kosmetisch für die Achsenbeschriftung
 fig, ax = plt.subplots(figsize=(10, 5))
 df.plot(ax=ax, marker='o')
 plt.ylim(bottom=10,top=40)
-texts=[]
-for col in df.columns:
+
+texts = []
+for col, line in zip(df.columns, ax.get_lines()):
+    color = line.get_color()  # gleiche Farbe wie die Linie
     for x, y in zip(df.index, df[col]):
-        texts.append(ax.text(x, y+0.3, f"{y:.2f}", ha="center", va="bottom", fontsize=8))
-adjust_text(texts, ax=ax)
+        if col == "NO2-Flächenbelastung":  
+            # blaue Linie → Labels UNTER dem Punkt
+            texts.append(
+                ax.text(
+                    x, y-0.5, f"{y:.2f}",
+                    ha="center", va="top", fontsize=8, color=color
+                )
+            )
+        else:
+            # alle anderen Linien → Labels ÜBER dem Punkt
+            texts.append(
+                ax.text(
+                    x, y+0.5, f"{y:.2f}",
+                    ha="center", va="bottom", fontsize=8, color=color
+                )
+            )
 ax.set_ylabel("Belastung (µg/m³)")
 ax.set_xlabel("Jahr")
 ax.set_title("NO₂ und PM₁₀ – Durchschnittliche Jahresbelastung")
 ax.grid(True)
 ax.legend(title="Kategorie")
-
 
 col1, col2 = st.columns([5, 1])
 st.set_page_config(layout="wide")
@@ -376,6 +391,7 @@ Das LfULG berechnet auf der Grundlage des Sächsischen Emissionskatasters und de
 **4. Kartenbeschreibung**\n
 Die Karte stellt vor einem Stadthintergrund, der zur besseren Orientierung im Stadtgebiet dient, im Ein-Kilometer-Raster die flächenhafte PM10-Belastung als Jahresmittelwert dar. Zusätzlich wird die häufig erhöhte Luftverschmutzung am Straßenrand für ein speziell festgelegtes Straßennetz der Stadt Dresden dargestellt. Beide Werte zusammen können einen Eindruck über die Belastungssituation in der Stadt vermitteln. Punktgenaue Aussagen sind naturgemäß in einem Ein-Kilometer-Raster nicht möglich. Auch bei der berechneten Straßenrandbelastung sind derartige Aussagen nicht möglich, weil die verwendeten Bebauungsdaten (Fahrbahnabstand, Bebauungsdichte, Bebauungshöhe), die zur Ermittlung dieser Belastung herangezogen werden, Mittelwerte sind, die für mindestens 65 Meter lange Abschnitte gelten.\n
 """)
+
 
 
 
