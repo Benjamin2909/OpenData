@@ -363,7 +363,7 @@ Die Karte stellt vor einem Stadthintergrund, der zur besseren Orientierung im St
 st.markdown("<a name='PM₁₀-Informationen'></a>", unsafe_allow_html=True)
 st.subheader("4. Informationen zur PM₁₀-Belastung")
 st.write("""**1. Problemstellung**\n
-Einer der gesundheitlich relevanten Luftschadstoffe, bei de-nen die Einhaltung der Grenzwerte in der Vergangenheit nicht überall gelang, ist die Staubbelastung. Dabei wird seit 2002 nicht mehr der Gesamtstaub betrachtet, sondern nur die Teilchen mit einem aerodynamischen Durchmesser von circa zehn Mikrometer (1 Mikrometer = 0,000001 Meter). Die Bezeichnung „PM10“ wird aus dem Englischen „particulate matter“ abgeleitet. Die „10“ steht für die zehn Mikrometer (μm) des Teilchendurchmessers.\n
+Einer der gesundheitlich relevanten Luftschadstoffe, bei denen die Einhaltung der Grenzwerte in der Vergangenheit nicht überall gelang, ist die Staubbelastung. Dabei wird seit 2002 nicht mehr der Gesamtstaub betrachtet, sondern nur die Teilchen mit einem aerodynamischen Durchmesser von circa zehn Mikrometer (1 Mikrometer = 0,000001 Meter). Die Bezeichnung „PM10“ wird aus dem Englischen „particulate matter“ abgeleitet. Die „10“ steht für die zehn Mikrometer (μm) des Teilchendurchmessers.\n
 Seit 2005 gelten in der Europäischen Union zwei Grenzwerte:\n
 - der Jahresmittelwert von 40 Mikrogramm pro Kubikmeter (μg/m³) und\n
 - der Tagesmittelwert von 50 μg/m³, welcher 35-mal im Jahr überschritten werden darf.\n
@@ -391,6 +391,7 @@ Das LfULG berechnet auf der Grundlage des Sächsischen Emissionskatasters und de
 **4. Kartenbeschreibung**\n
 Die Karte stellt vor einem Stadthintergrund, der zur besseren Orientierung im Stadtgebiet dient, im Ein-Kilometer-Raster die flächenhafte PM10-Belastung als Jahresmittelwert dar. Zusätzlich wird die häufig erhöhte Luftverschmutzung am Straßenrand für ein speziell festgelegtes Straßennetz der Stadt Dresden dargestellt. Beide Werte zusammen können einen Eindruck über die Belastungssituation in der Stadt vermitteln. Punktgenaue Aussagen sind naturgemäß in einem Ein-Kilometer-Raster nicht möglich. Auch bei der berechneten Straßenrandbelastung sind derartige Aussagen nicht möglich, weil die verwendeten Bebauungsdaten (Fahrbahnabstand, Bebauungsdichte, Bebauungshöhe), die zur Ermittlung dieser Belastung herangezogen werden, Mittelwerte sind, die für mindestens 65 Meter lange Abschnitte gelten.\n
 """)
+
 
 
 
