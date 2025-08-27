@@ -12,12 +12,12 @@ out geom;
 response = requests.get("http://overpass-api.de/api/interpreter", params={'data': query})
 
 if response.status_code != 200:
-    print("❌ Overpass API nicht erreichbar.")
+    print(" Overpass API nicht erreichbar.")
     exit(1)
 
 data = response.json()
 if not data.get("elements"):
-    print("⚠️ Keine Stadtgrenze für Dresden gefunden.")
+    print(" Keine Stadtgrenze für Dresden gefunden.")
     exit(0)
 
 element = data["elements"][0]
@@ -38,4 +38,5 @@ output_path = Path("C:/Users/benab/.vscode/extensions/Dev/Project2/dresden_grenz
 with open(output_path, "w", encoding="utf-8") as f:
     geojson.dump(geojson_obj, f, indent=2)
 
-print(f"✅ Stadtgrenze gespeichert unter: {output_path.resolve()}")
+print(f" Stadtgrenze gespeichert unter: {output_path.resolve()}")
+
