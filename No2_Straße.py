@@ -17,7 +17,7 @@ output_dir.mkdir(parents=True, exist_ok=True)
 
 # Verarbeite jede CSV
 for jahr, filename in csv_files.items():
-    print(f"🔄 Verarbeite {filename} ...")
+    print(f" Verarbeite {filename} ...")
     try:
         df = pd.read_csv(filename, sep=';', encoding='utf-8')
         features = []
@@ -57,7 +57,8 @@ for jahr, filename in csv_files.items():
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump(geojson_obj, f, ensure_ascii=False, indent=2)
 
-        print(f"✅ Gespeichert: {out_path.name}")
+        print(f" Gespeichert: {out_path.name}")
 
     except Exception as e:
-        print(f"❌ Fehler bei {filename}: {e}")
+
+        print(f" Fehler bei {filename}: {e}")
