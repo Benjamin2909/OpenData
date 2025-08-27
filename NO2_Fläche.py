@@ -24,7 +24,7 @@ def clean_wkt(wkt_str):
 # Verarbeitung pro Datei
 for file_name, jahr in input_files:
     try:
-        print(f"🔄 Verarbeite: {file_name}")
+        print(f" Verarbeite: {file_name}")
         df = pd.read_csv(file_name, sep=';', encoding='utf-8')
 
         # Geometrien umwandeln
@@ -37,7 +37,8 @@ for file_name, jahr in input_files:
         # Exportieren
         output_path = output_dir / f"no2_flaeche_{jahr}.geojson"
         gdf.to_file(output_path, driver="GeoJSON")
-        print(f"✅ Gespeichert: {output_path.name}")
+        print(f" Gespeichert: {output_path.name}")
 
     except Exception as e:
-        print(f"❌ Fehler in Datei {file_name}: {e}")
+        print(f" Fehler in Datei {file_name}: {e}")
+
