@@ -26,7 +26,7 @@ for jahr, filename in pm10_strasse_files.items():
         if "deskn1" in df.columns:
             df = df.rename(columns={"deskn1": "pm10_ist"})
         else:
-            raise ValueError(f"❌ 'deskn1' fehlt in Datei {filename}")
+            raise ValueError(f 'deskn1' fehlt in Datei {filename}")
 
     features = []
     for _, row in df.iterrows():
@@ -57,4 +57,5 @@ for jahr, filename in pm10_strasse_files.items():
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(geojson_obj, f, ensure_ascii=False, indent=2)
 
-    print(f"✅ Gespeichert: {output_file.name}")
+
+    print(f" Gespeichert: {output_file.name}")
